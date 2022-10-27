@@ -25,6 +25,10 @@ public:
                                         game::DVAR_ARCHIVE);
     dvar::override::dvar_register_string("fs_basegame", BASEGAME,
                                          game::DVAR_INIT);
+
+#ifdef _DEBUG
+    dvar::override::dvar_register_bool("sv_cheats", true, game::DVAR_NONE);
+#endif
   }
 
   void post_load() override {
@@ -38,6 +42,11 @@ private:
     utils::hook::set<std::uint8_t>(0x635913, 0xEB); // Cheat protected
     utils::hook::set<std::uint8_t>(0x6358A5, 0xEB); // Write protected
     utils::hook::set<std::uint8_t>(0x635974, 0xEB); // Latched
+
+#ifdef _DEBUG
+    // Nop Dvar_RegisterVariant for sv_cheats in Dvar_Init
+    utils::hook::nop(0x471522, 5);
+#endif
 
     // Skip dvar output
     utils::hook::set<std::uint8_t>(0x4CD2B7, 0xEB);

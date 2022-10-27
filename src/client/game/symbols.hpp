@@ -59,6 +59,7 @@ WEAK symbol<void(const char* dvarName, const char* value)> Dvar_SetStringByName{
 WEAK symbol<void(const dvar_t* dvar, const char* value)> Dvar_SetString{
     0x480E70};
 WEAK symbol<const char*(const char* dvarName)> Dvar_GetString{0x411F50};
+WEAK symbol<bool(const char* dvarName)> Dvar_GetBool{0x481010};
 
 // Script
 WEAK symbol<void(const char* error)> Scr_Error{0x4E9C50};

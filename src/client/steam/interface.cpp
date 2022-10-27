@@ -9,9 +9,7 @@ interface::interface() : interface(nullptr) {}
 interface::interface(void* interface_ptr)
     : interface_ptr_(static_cast<void***>(interface_ptr)) {}
 
-interface::operator bool() const {
-  return this->interface_ptr_ != nullptr;
-}
+interface::operator bool() const { return this->interface_ptr_ != nullptr; }
 
 void* interface::find_method(const std::string& name) {
   const auto method_entry = this->methods_.find(name);
