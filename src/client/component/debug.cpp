@@ -1,5 +1,5 @@
 #include <std_include.hpp>
-#include "../loader/component_loader.hpp"
+#include "loader/component_loader.hpp"
 #include "game/dvars.hpp"
 #include "game/engine/scoped_critical_section.hpp"
 

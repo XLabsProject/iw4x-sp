@@ -1,5 +1,5 @@
 #include <std_include.hpp>
-#include "../loader/component_loader.hpp"
+#include "loader/component_loader.hpp"
 
 #include <utils/string.hpp>
 #include <utils/memory.hpp>

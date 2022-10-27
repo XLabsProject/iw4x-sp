@@ -1,6 +1,6 @@
 
 #include <std_include.hpp>
-#include "../loader/component_loader.hpp"
+#include "loader/component_loader.hpp"
 
 #include <utils/hook.hpp>
 
@@ -50,7 +50,7 @@ static std::unordered_map<std::string, dvar_int> register_int_overrides;
 static std::unordered_map<std::string, dvar_string> register_string_overrides;
 
 void dvar_register_bool(const std::string& name, const bool value,
-                        const unsigned __int16 flags) {
+                        const std::uint16_t flags) {
   dvar_bool values;
   values.value = value;
   values.flags = flags;
@@ -59,7 +59,7 @@ void dvar_register_bool(const std::string& name, const bool value,
 
 void dvar_register_float(const std::string& name, const float value,
                          const float min, const float max,
-                         const unsigned __int16 flags) {
+                         const std::uint16_t flags) {
   dvar_float values;
   values.value = value;
   values.min = min;
@@ -69,7 +69,7 @@ void dvar_register_float(const std::string& name, const float value,
 }
 
 void dvar_register_int(const std::string& name, const int value, const int min,
-                       const int max, const unsigned __int16 flags) {
+                       const int max, const std::uint16_t flags) {
   dvar_int values;
   values.value = value;
   values.min = min;
@@ -79,7 +79,7 @@ void dvar_register_int(const std::string& name, const int value, const int min,
 }
 
 void dvar_register_string(const std::string& name, const std::string& value,
-                          const unsigned __int16 flags) {
+                          const std::uint16_t flags) {
   dvar_string values;
   values.value = value;
   values.flags = flags;
@@ -94,7 +94,7 @@ utils::hook::detour dvar_register_int_hook;
 utils::hook::detour dvar_register_string_hook;
 
 const game::dvar_t* dvar_register_bool_stub(const char* name, bool value,
-                                            unsigned __int16 flags,
+                                            std::uint16_t flags,
                                             const char* description) {
   auto* var = find_dvar(override::register_bool_overrides, name);
   if (var) {
@@ -108,7 +108,7 @@ const game::dvar_t* dvar_register_bool_stub(const char* name, bool value,
 
 const game::dvar_t* dvar_register_float_stub(const char* name, float value,
                                              float min, float max,
-                                             unsigned __int16 flags,
+                                             std::uint16_t flags,
                                              const char* description) {
   auto* var = find_dvar(override::register_float_overrides, name);
   if (var) {
@@ -123,7 +123,7 @@ const game::dvar_t* dvar_register_float_stub(const char* name, float value,
 }
 
 const game::dvar_t* dvar_register_int_stub(const char* name, int value, int min,
-                                           int max, unsigned __int16 flags,
+                                           int max, std::uint16_t flags,
                                            const char* description) {
   auto* var = find_dvar(override::register_int_overrides, name);
   if (var) {
@@ -139,7 +139,7 @@ const game::dvar_t* dvar_register_int_stub(const char* name, int value, int min,
 
 const game::dvar_t* dvar_register_string_stub(const char* name,
                                               const char* value,
-                                              unsigned __int16 flags,
+                                              std::uint16_t flags,
                                               const char* description) {
   auto* var = find_dvar(override::register_string_overrides, name);
   if (var) {

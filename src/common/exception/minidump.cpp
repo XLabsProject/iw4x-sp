@@ -1,4 +1,4 @@
-#include "../utils/nt.hpp"
+#include <utils/nt.hpp>
 #include "minidump.hpp"
 
 #include <DbgHelp.h>

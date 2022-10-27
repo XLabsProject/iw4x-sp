@@ -1,7 +1,8 @@
 #include <string>
 
-#include "../utils/nt.hpp"
-#include "../utils/string.hpp"
+#include <utils/nt.hpp>
+#include <utils/string.hpp>
+
 #include "flags.hpp"
 
 #include <cassert>
