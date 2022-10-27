@@ -33,6 +33,7 @@
 #include <mutex>
 #include <string>
 #include <map>
+#include <format>
 
 #pragma comment(lib, "ntdll.lib")
 
