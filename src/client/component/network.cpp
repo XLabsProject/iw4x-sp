@@ -11,8 +11,9 @@ namespace network {
 namespace {
 void cl_co_op_connect(const command::params& params) {
   // Valid format is IP Port
-  if (params.size() < 3)
+  if (params.size() < 3) {
     return;
+  }
 
   const auto input = std::strtol(params.get(2), nullptr, 10);
   const auto port = htons(static_cast<std::uint16_t>(input));
