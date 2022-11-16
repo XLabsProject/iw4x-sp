@@ -2,10 +2,26 @@
 #include "loader/component_loader.hpp"
 
 #include "network.hpp"
+#include "command.hpp"
 
 #include <utils/hook.hpp>
+#include <utils/string.hpp>
 
 namespace network {
+namespace {
+void cl_co_op_connect(const command::params& params) {
+  // Valid format is IP Port
+  if (params.size() < 3)
+    return;
+
+  const auto input = std::strtol(params.get(2), nullptr, 10);
+  const auto port = htons(static_cast<std::uint16_t>(input));
+
+  command::execute(
+      utils::string::va("connect_coop %s %hu", params.get(1), port));
+}
+} // namespace
+
 class component final : public component_interface {
 public:
   void post_load() override { patch_sp(); }
@@ -36,15 +52,12 @@ private:
     utils::hook(0x65E786, game::Com_DPrintf, HOOK_CALL).install()->quick();
     utils::hook(0x65D659, game::Com_DPrintf, HOOK_CALL).install()->quick();
 
-    // Disable BigShort in NET_StringToAdr
-    utils::hook(0x40A657, game::ShortNoSwap, HOOK_CALL).install()->quick();
-    utils::hook(0x40A676, game::ShortNoSwap, HOOK_CALL).install()->quick();
-
     // Disable BigShort in NET_AdrToString
     utils::hook(0x4BF4D1, game::ShortNoSwap, HOOK_CALL).install()->quick();
     utils::hook(0x4BF50C, game::ShortNoSwap, HOOK_CALL).install()->quick();
 
     utils::hook::set<const char*>(0x475417, "connect_coop");
+    command::add("connect", cl_co_op_connect);
 
     // Force Win socket initialization
     utils::hook::nop(0x42B649, 2);
