@@ -1,21 +1,14 @@
 #include "string.hpp"
 #include <sstream>
-#include <cstdarg>
 #include <algorithm>
 
 #include "nt.hpp"
 
 namespace utils::string {
-const char* va(const char* fmt, ...) {
+const char* va_format(std::string_view fmt, std::format_args&& args) {
   static thread_local va_provider<8, 256> provider;
-
-  va_list ap;
-  va_start(ap, fmt);
-
-  const char* result = provider.get(fmt, ap);
-
-  va_end(ap);
-  return result;
+  const auto str = std::vformat(fmt, args);
+  return provider.copy(str);
 }
 
 std::vector<std::string> split(const std::string& s, const char delim) {

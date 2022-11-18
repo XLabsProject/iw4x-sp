@@ -15,13 +15,13 @@ constexpr auto* BUILD_TYPE = "IW4x_DEV SP";
 constexpr auto* BUILD_TYPE = "IW4x SP";
 #endif
 
-const char* get_build_number() {
+constexpr const char* get_build_number() {
   return SHORTVERSION " latest " __DATE__ " " __TIME__;
 }
 
 const char* get_version_string() {
   const auto* result = utils::string::va(
-      "%s %s build %s %s", BUILD_TYPE, "(Alpha)", get_build_number(),
+      "{} {} build {} {}", BUILD_TYPE, "(Alpha)", get_build_number(),
       reinterpret_cast<const char*>(0x6A1574));
 
   return result;

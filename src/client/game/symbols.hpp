@@ -10,6 +10,7 @@ WEAK symbol<void(int channel, const char* fmt, ...)> Com_PrintError{0x4C6980};
 WEAK symbol<void(int channel, const char* fmt, ...)> Com_DPrintf{0x42B1F0};
 WEAK symbol<void(errorParm_t code, const char* fmt, ...)> Com_Error{0x43DD90};
 WEAK symbol<void()> Com_OpenLogFile{0x603030};
+WEAK symbol<int(char* data_p)> Com_Compress{0x4316A0};
 
 // Sys
 WEAK symbol<void(const char* exeName)> Sys_QuitAndStartProcess{0x4D69A0};
@@ -101,6 +102,7 @@ WEAK symbol<char*(netadr_t a)> NET_AdrToString{0x4BF490};
 
 // Memory
 WEAK symbol<void*(int size)> Hunk_AllocateTempMemory{0x492DF0};
+WEAK symbol<void*(int size, int alignment)> Hunk_AllocAlignInternal{0x486C40};
 
 // Zone
 WEAK symbol<void*(int size)> Z_VirtualAllocInternal{0x4D9CF0};
@@ -149,6 +151,17 @@ WEAK symbol<void(const ScreenPlacement* scrPlace, const char* text,
                  int vertAlign, float scale, const float* color, int style)>
     UI_DrawText{0x40FC70};
 
+// PC
+WEAK symbol<int(source_s* source)> PC_Directive_define{0x4F8CF0};
+WEAK symbol<void(define_s* define)> PC_FreeDefine{0x464F40};
+WEAK symbol<token_s*(token_s* token)> PC_CopyToken{0x4D3670};
+WEAK symbol<int(int handle, pc_token_s* pc_token)> PC_ReadTokenHandle{0x46C3B0};
+WEAK symbol<void(int handle, const char* format, ...)> PC_SourceError{0x43A6D0};
+
+WEAK symbol<void*(unsigned int size)> GetMemory{0x441880};
+WEAK symbol<void*(unsigned int size)> GetClearedMemory{0x41BCD0};
+WEAK symbol<void(void* ptr)> FreeMemory{0x4A7D20};
+
 // PM
 WEAK symbol<void(pmove_t* pm, trace_t* results, const float* start,
                  const float* end, const Bounds* bounds, int passEntityNum,
@@ -189,6 +202,9 @@ WEAK symbol<int> logfile{0x145EC6C};
 WEAK symbol<level_locals_t> level{0x10A7190};
 
 WEAK symbol<RTL_CRITICAL_SECTION> s_criticalSection{0x19FBA28};
+
+WEAK symbol<source_s*> sourceFiles{0x7440E8};
+WEAK symbol<int> numtokens{0x7441F0};
 
 WEAK symbol<void*> DB_GetXAssetSizeHandlers{0x733408};
 WEAK symbol<void*> DB_XAssetPool{0x7337F8};

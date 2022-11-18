@@ -42,7 +42,7 @@ std::string get_hdd_serial() {
     return {};
   }
 
-  return utils::string::va("%08X", serial);
+  return utils::string::va("{:08X}", serial);
 }
 
 std::string get_key_entropy() {

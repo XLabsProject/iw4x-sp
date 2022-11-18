@@ -131,6 +131,91 @@ enum fsMode_t {
   FS_APPEND_SYNC = 0x3,
 };
 
+struct token_s {
+  char string[1024];
+  int type;
+  int subtype;
+  unsigned int intvalue;
+  long double floatvalue;
+  char* whitespace_p;
+  char* endwhitespace_p;
+  int line;
+  int linescrossed;
+  token_s* next;
+};
+
+static_assert(sizeof(token_s) == 0x430);
+
+struct define_s {
+  char* name;
+  int flags;
+  int builtin;
+  int numparms;
+  token_s* parms;
+  token_s* tokens;
+  define_s* next;
+  define_s* hashnext;
+};
+
+struct punctuation_s {
+  const char* p;
+  int n;
+  punctuation_s* next;
+};
+
+struct script_s {
+  char filename[64];
+  char* buffer;
+  char* script_p;
+  char* end_p;
+  char* lastscript_p;
+  char* whitespace_p;
+  char* endwhitespace_p;
+  int length;
+  int line;
+  int lastline;
+  int tokenavailable;
+  int flags;
+  punctuation_s* punctuations;
+  punctuation_s** punctuationtable;
+  token_s token;
+  script_s* next;
+};
+
+enum parseSkip_t {
+  SKIP_NO = 0x0,
+  SKIP_YES = 0x1,
+  SKIP_ALL_ELIFS = 0x2,
+};
+
+struct indent_s {
+  int type;
+  parseSkip_t skip;
+  script_s* script;
+  indent_s* next;
+};
+
+struct source_s {
+  char filename[64];
+  char includepath[64];
+  punctuation_s* punctuations;
+  script_s* scriptstack;
+  token_s* tokens;
+  define_s* defines;
+  define_s** definehash;
+  indent_s* indentstack;
+  int skip;
+  token_s token;
+};
+
+struct pc_token_s {
+  int type;
+  int subtype;
+  int intvalue;
+  float floatvalue;
+  char string[1024];
+};
+
 struct cmd_function_s {
   cmd_function_s* next;
   const char* name;
@@ -352,6 +437,59 @@ struct GameWorldSp {
 
 static_assert(sizeof(GameWorldSp) == 0x38);
 
+struct loadAssets_t {
+  float fadeClamp;
+  int fadeCycle;
+  float fadeAmount;
+  float fadeInAmount;
+};
+
+struct rectDef_s {
+  float x;
+  float y;
+  float w;
+  float h;
+  char horzAlign;
+  char vertAlign;
+};
+
+struct windowDef_t {
+  const char* name;
+  rectDef_s rect;
+  rectDef_s rectClient;
+  const char* group;
+  int style;
+  int border;
+  int ownerDraw;
+  int ownerDrawFlags;
+  float borderSize;
+  int staticFlags;
+  int dynamicFlags[1];
+  int nextTime;
+  float foreColor[4];
+  float backColor[4];
+  float borderColor[4];
+  float outlineColor[4];
+  float disableColor[4];
+  void* background;
+};
+
+struct menuTransition {
+  int transitionType;
+  int targetField;
+  int startTime;
+  float startVal;
+  float endVal;
+  float time;
+  int endTriggerType;
+};
+
+struct MenuList {
+  const char* name;
+  int menuCount;
+  void** menus;
+};
+
 union XAssetHeader {
   void* data;
   GameWorldSp* gameWorldSp;
@@ -359,6 +497,7 @@ union XAssetHeader {
   Font_s* font;
   WeaponCompleteDef* weapon;
   RawFile* rawfile;
+  MenuList* menuList;
 };
 
 struct XAsset {

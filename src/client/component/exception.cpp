@@ -21,14 +21,13 @@ void show_mouse_cursor() {
 }
 
 void display_error_dialog() {
-  std::string error_str =
-      utils::string::va("Fatal error (0x%08X) at 0x%p.\n"
-                        "A minidump has been written.\n\n",
-                        exception_data.code, exception_data.address);
+  const auto* error_str = utils::string::va(
+      "Fatal error ({:#08x}) at {}.\nA minidump has been written.\n\n",
+      exception_data.code, exception_data.address);
 
   utils::thread::suspend_other_threads();
   show_mouse_cursor();
-  MessageBoxA(nullptr, error_str.data(), "IW4SP Error", MB_ICONERROR);
+  MessageBoxA(nullptr, error_str, "IW4SP Error", MB_ICONERROR);
   TerminateProcess(GetCurrentProcess(), exception_data.code);
 }
 
@@ -63,9 +62,9 @@ std::string generate_crash_info(const LPEXCEPTION_POINTERS exceptioninfo) {
   line("IW4SP Crash Dump");
   line("");
   line("Timestamp: "s + get_timestamp());
-  line(utils::string::va("Exception: 0x%08X",
+  line(utils::string::va("Exception: {:#08x}",
                          exceptioninfo->ExceptionRecord->ExceptionCode));
-  line(utils::string::va("Address: 0x%lX",
+  line(utils::string::va("Address: {}",
                          exceptioninfo->ExceptionRecord->ExceptionAddress));
 
 #pragma warning(push)
@@ -76,15 +75,15 @@ std::string generate_crash_info(const LPEXCEPTION_POINTERS exceptioninfo) {
   GetVersionExA(reinterpret_cast<LPOSVERSIONINFOA>(&version_info));
 #pragma warning(pop)
 
-  line(utils::string::va("OS Version: %u.%u", version_info.dwMajorVersion,
+  line(utils::string::va("OS Version: {}.{}", version_info.dwMajorVersion,
                          version_info.dwMinorVersion));
 
   return info;
 }
 
 void write_minidump(const LPEXCEPTION_POINTERS exceptioninfo) {
-  const std::string crash_name =
-      utils::string::va("minidumps/iw4sp-crash-%s.zip", get_timestamp().data());
+  const auto* crash_name =
+      utils::string::va("minidumps/iw4sp-crash-{}.zip", get_timestamp());
 
   utils::compression::zip::archive zip_file{};
   zip_file.add("crash.dmp", create_minidump(exceptioninfo));

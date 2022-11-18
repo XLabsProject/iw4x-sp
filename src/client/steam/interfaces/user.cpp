@@ -1,7 +1,7 @@
 #include <std_include.hpp>
 #include "steam/steam.hpp"
 
-#include <utils/cryptography.hpp>
+#include "component/auth.hpp"
 
 namespace steam {
 namespace {
@@ -13,9 +13,9 @@ int user::GetHSteamUser() { return NULL; }
 bool user::LoggedOn() { return true; }
 
 steam_id user::GetSteamID() {
-  static std::uint32_t seed = 0;
+  static std::uint64_t seed = 0;
   if (!seed) {
-    seed = ::utils::cryptography::random::get_integer();
+    seed = auth::get_guid();
   }
 
   steam_id id;

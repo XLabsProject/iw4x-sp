@@ -70,10 +70,11 @@ private:
       return nullptr;
 
     for (auto i = 1; i < 1000; ++i) {
-      std::string name =
-          utils::string::va("CLIENTENGINE_INTERFACE_VERSION%03i", i);
+      const auto* name =
+          utils::string::va("CLIENTENGINE_INTERFACE_VERSION{:03}", i);
+
       auto* const client_engine = this->steam_client_module_.invoke<void*>(
-          "CreateInterface", name.data(), nullptr);
+          "CreateInterface", name, nullptr);
       if (client_engine)
         return client_engine;
     }
@@ -82,14 +83,14 @@ private:
   }
 
   void load_client() {
-    const std::string steam_path = steam::get_steam_install_directory();
+    const auto steam_path = steam::get_steam_install_directory();
     if (steam_path.empty())
       return;
 
-    utils::nt::library::load(steam_path + "tier0_s.dll");
-    utils::nt::library::load(steam_path + "vstdlib_s.dll");
+    utils::nt::library::load(steam_path / "tier0_s.dll");
+    utils::nt::library::load(steam_path / "vstdlib_s.dll");
     this->steam_client_module_ =
-        utils::nt::library::load(steam_path + "steamclient.dll");
+        utils::nt::library::load(steam_path / "steamclient.dll");
     if (!this->steam_client_module_)
       return;
 
@@ -129,8 +130,8 @@ private:
     GetCurrentDirectoryA(sizeof(our_directory), our_directory);
 
     const auto path = runner_file.get_extracted_file();
-    const std::string cmdline = utils::string::va(
-        "\"%s\" -proc %d", path.data(), GetCurrentProcessId());
+    const auto* cmdline =
+        utils::string::va("\"{}\" -proc {}", path, GetCurrentProcessId());
 
     game_id game_id;
     game_id.raw.type = 1; // k_EGameIDTypeGameMod
@@ -140,9 +141,9 @@ private:
     game_id.raw.mod_id =
         *reinterpret_cast<const unsigned int*>(mod_id) | 0x80000000;
 
-    this->client_user_.invoke<bool>("SpawnProcess", path.data(), cmdline.data(),
-                                    our_directory, &game_id.bits, title.data(),
-                                    app_id, 0, 0);
+    this->client_user_.invoke<bool>("SpawnProcess", path.data(), cmdline,
+                                    our_directory, game_id.bits, title.data(),
+                                    app_id, 0, 0, 0);
   }
 
   void do_cleanup() {

@@ -1,19 +1,26 @@
 #pragma once
 #include "memory.hpp"
+#include <iterator>
+#include <string>
+#include <string_view>
+#include <format>
 
 #ifndef ARRAYSIZE
-template <class Type, size_t n> size_t ARRAYSIZE(Type (&)[n]) { return n; }
+template <class Type, std::size_t n> std::size_t ARRAYSIZE(Type (&)[n]) {
+  return n;
+}
 #endif
 
 namespace utils::string {
-template <size_t Buffers, size_t MinBufferSize> class va_provider final {
+template <std::size_t Buffers, std::size_t MinBufferSize>
+class va_provider final {
 public:
   static_assert(Buffers != 0 && MinBufferSize != 0,
                 "Buffers and MinBufferSize mustn't be 0");
 
   va_provider() : current_buffer_(0) {}
 
-  char* get(const char* format, const va_list ap) {
+  const char* copy(const std::string& str) {
     ++this->current_buffer_ %= ARRAYSIZE(this->string_pool_);
     auto entry = &this->string_pool_[this->current_buffer_];
 
@@ -21,16 +28,11 @@ public:
       throw std::runtime_error("String pool not initialized");
     }
 
-    while (true) {
-      const int res =
-          vsnprintf_s(entry->buffer, entry->size, _TRUNCATE, format, ap);
-      if (res > 0)
-        break; // Success
-      if (res == 0)
-        return nullptr; // Error
-
+    while (str.size() > entry->size) {
       entry->double_size();
     }
+
+    std::memcpy(entry->buffer, str.data(), str.size());
 
     return entry->buffer;
   }
@@ -38,7 +40,7 @@ public:
 private:
   class entry final {
   public:
-    explicit entry(const size_t _size = MinBufferSize)
+    explicit entry(const std::size_t _size = MinBufferSize)
         : size(_size), buffer(nullptr) {
       if (this->size < MinBufferSize)
         this->size = MinBufferSize;
@@ -64,15 +66,31 @@ private:
       this->allocate();
     }
 
-    size_t size;
+    std::size_t size;
     char* buffer;
   };
 
-  size_t current_buffer_;
+  std::size_t current_buffer_;
   entry string_pool_[Buffers];
 };
 
-const char* va(const char* fmt, ...);
+const char* va_format(std::string_view fmt, std::format_args&& args);
+
+template <typename Arg> // This should display a nice "null" instead of a number
+static void sanitize_format_args(Arg& arg) {
+  if constexpr (std::is_same_v<Arg, char*> ||
+                std::is_same_v<Arg, const char*>) {
+    if (arg == nullptr) {
+      arg = const_cast<char*>("null");
+    }
+  }
+}
+
+template <typename... Args>
+const char* va(std::string_view fmt, Args&&... args) {
+  (sanitize_format_args(args), ...);
+  return va_format(fmt, std::make_format_args(args...));
+}
 
 std::vector<std::string> split(const std::string& s, char delim);
 

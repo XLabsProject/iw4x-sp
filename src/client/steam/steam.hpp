@@ -116,7 +116,7 @@ STEAM_EXPORT utils* SteamUtils();
 STEAM_EXPORT apps* SteamApps();
 STEAM_EXPORT user_stats* SteamUserStats();
 
-std::string get_steam_install_directory();
+std::filesystem::path get_steam_install_directory();
 
 extern ::utils::nt::library overlay;
 } // namespace steam

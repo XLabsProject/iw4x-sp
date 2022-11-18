@@ -24,7 +24,7 @@ public:
       return static_cast<T*>(this->allocate(count * sizeof(T)));
     }
 
-    bool empty() const;
+    [[nodiscard]] bool empty() const;
 
     char* duplicate_string(const std::string& string);
 

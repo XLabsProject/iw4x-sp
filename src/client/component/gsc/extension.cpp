@@ -115,7 +115,7 @@ public:
         game::Scr_AddFloat(static_cast<float>(game::Scr_GetInt(0)));
         break;
       default:
-        game::Scr_ParamError(0, utils::string::va("cannot cast %s to float",
+        game::Scr_ParamError(0, utils::string::va("cannot cast {} to float",
                                                   game::Scr_GetTypeName(0)));
         break;
       }

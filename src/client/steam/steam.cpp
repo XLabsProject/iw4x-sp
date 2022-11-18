@@ -67,8 +67,9 @@ void callbacks::run_callbacks() {
   std::lock_guard _(mutex_);
 
   for (const auto& result : results_) {
-    if (result_handlers_.contains(result.call)) {
-      result_handlers_[result.call]->run(result.data, false, result.call);
+    if (const auto itr = result_handlers_.find(result.call);
+        itr != result_handlers_.end()) {
+      itr->second->run(result.data, false, result.call);
     }
 
     for (const auto& callback : callback_list_) {
@@ -85,10 +86,10 @@ void callbacks::run_callbacks() {
   results_.clear();
 }
 
-std::string get_steam_install_directory() {
+std::filesystem::path get_steam_install_directory() {
   static std::string install_path{};
   if (!install_path.empty()) {
-    return install_path;
+    return {install_path};
   }
 
   HKEY reg_key;
@@ -103,7 +104,7 @@ std::string get_steam_install_directory() {
     install_path = path;
   }
 
-  return install_path;
+  return {install_path};
 }
 
 extern "C" {
@@ -116,7 +117,7 @@ bool SteamAPI_Init() {
     const auto steam_path = get_steam_install_directory();
     if (!steam_path.empty()) {
       overlay =
-          ::utils::nt::library::load(steam_path + "gameoverlayrenderer.dll");
+          ::utils::nt::library::load(steam_path / "gameoverlayrenderer.dll");
     }
   }
 

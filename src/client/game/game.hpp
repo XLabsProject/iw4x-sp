@@ -29,10 +29,15 @@ ScreenPlacement* ScrPlace_GetUnsafeFullPlacement();
 
 bool Sys_TryEnterCriticalSection(CriticalSection critSect);
 
+int PC_Int_Parse(int handle, int* i);
+int PC_Float_Parse(int handle, float* f);
+
 // Global definitions
 constexpr auto CMD_MAX_NESTING = 8;
 
 constexpr std::size_t MAX_LOCAL_CLIENTS = 1;
+
+constexpr auto MAX_QPATH = 64;
 } // namespace game
 
 #include "symbols.hpp"
