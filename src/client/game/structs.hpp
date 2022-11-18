@@ -437,53 +437,6 @@ struct GameWorldSp {
 
 static_assert(sizeof(GameWorldSp) == 0x38);
 
-struct loadAssets_t {
-  float fadeClamp;
-  int fadeCycle;
-  float fadeAmount;
-  float fadeInAmount;
-};
-
-struct rectDef_s {
-  float x;
-  float y;
-  float w;
-  float h;
-  char horzAlign;
-  char vertAlign;
-};
-
-struct windowDef_t {
-  const char* name;
-  rectDef_s rect;
-  rectDef_s rectClient;
-  const char* group;
-  int style;
-  int border;
-  int ownerDraw;
-  int ownerDrawFlags;
-  float borderSize;
-  int staticFlags;
-  int dynamicFlags[1];
-  int nextTime;
-  float foreColor[4];
-  float backColor[4];
-  float borderColor[4];
-  float outlineColor[4];
-  float disableColor[4];
-  void* background;
-};
-
-struct menuTransition {
-  int transitionType;
-  int targetField;
-  int startTime;
-  float startVal;
-  float endVal;
-  float time;
-  int endTriggerType;
-};
-
 struct MenuList {
   const char* name;
   int menuCount;
