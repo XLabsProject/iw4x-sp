@@ -58,11 +58,7 @@ char* memory::duplicate_string(const std::string& string) {
   return new_string;
 }
 
-void memory::free(void* data) {
-  if (data) {
-    std::free(data);
-  }
-}
+void memory::free(void* data) { std::free(data); }
 
 void memory::free(const void* data) { free(const_cast<void*>(data)); }
 
