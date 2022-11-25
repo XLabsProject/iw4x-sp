@@ -2,6 +2,7 @@
 #include "loader/component_loader.hpp"
 #include "game/dvars.hpp"
 #include "game/engine/scoped_critical_section.hpp"
+#include "game/engine/large_local.hpp"
 
 #include <utils/hook.hpp>
 
@@ -57,9 +58,10 @@ void com_bug_f(const command::params& params) {
 void g_print_fast_file_errors(const char* fastfile) {
   assert(fastfile);
 
-  const auto rawfile_buf_large = std::make_unique<char[]>(0x18000);
+  game::engine::large_local rawfile_buf_large_local(0x18000);
+  auto* rawfile_buf = static_cast<char*>(rawfile_buf_large_local.get_buf());
 
-  auto* text = game::DB_ReadRawFile(fastfile, rawfile_buf_large.get(), 0x18000);
+  auto* text = game::DB_ReadRawFile(fastfile, rawfile_buf, 0x18000);
 
   assert(text);
 
