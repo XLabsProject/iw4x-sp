@@ -94,8 +94,9 @@ const char* va(std::string_view fmt, Args&&... args) {
 
 std::vector<std::string> split(const std::string& s, char delim);
 
-std::string to_lower(std::string text);
-std::string to_upper(std::string text);
+std::string to_lower(const std::string& text);
+std::string to_upper(const std::string& text);
+
 bool starts_with(const std::string& text, const std::string& substring);
 bool ends_with(const std::string& text, const std::string& substring);
 bool compare(const std::string& lhs, const std::string& rhs);

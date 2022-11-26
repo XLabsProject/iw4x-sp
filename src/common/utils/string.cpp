@@ -24,22 +24,24 @@ std::vector<std::string> split(const std::string& s, const char delim) {
   return elems;
 }
 
-std::string to_lower(std::string text) {
-  std::transform(text.begin(), text.end(), text.begin(),
-                 [](const unsigned char input) {
-                   return static_cast<char>(std::tolower(input));
-                 });
+std::string to_lower(const std::string& text) {
+  std::string result;
+  std::ranges::transform(text, std::back_inserter(result),
+                         [](const unsigned char input) {
+                           return static_cast<char>(std::tolower(input));
+                         });
 
-  return text;
+  return result;
 }
 
-std::string to_upper(std::string text) {
-  std::transform(text.begin(), text.end(), text.begin(),
-                 [](const unsigned char input) {
-                   return static_cast<char>(std::toupper(input));
-                 });
+std::string to_upper(const std::string& text) {
+  std::string result;
+  std::ranges::transform(text, std::back_inserter(result),
+                         [](const unsigned char input) {
+                           return static_cast<char>(std::toupper(input));
+                         });
 
-  return text;
+  return result;
 }
 
 bool starts_with(const std::string& text, const std::string& substring) {
