@@ -183,6 +183,9 @@ WEAK symbol<void(pmove_t* pm, trace_t* results, const float* start,
 // Live
 WEAK symbol<const char*(int controllerIndex)> Live_GetLocalClientName{0x492EF0};
 
+// Info
+WEAK symbol<int(const char* s)> Info_Validate{0x425530};
+
 // IW functions, could use Microsoft specific functions but who cares
 WEAK symbol<int(const char* s0, const char* s1)> I_stricmp{0x409B80};
 WEAK symbol<int(const char* s0, const char* s1, int n)> I_strnicmp{0x491E60};
