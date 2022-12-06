@@ -285,7 +285,7 @@ links {"common"}
 dependencies.imports()
 
 project "client"
-kind "ConsoleApp"
+kind "WindowedApp"
 language "C++"
 
 targetname "iw4x-sp"

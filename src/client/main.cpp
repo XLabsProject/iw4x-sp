@@ -101,3 +101,5 @@ int main() {
 
   return entry_point();
 }
+
+int APIENTRY WinMain(HINSTANCE, HINSTANCE, PSTR, int) { return main(); }
